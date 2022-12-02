@@ -7,6 +7,7 @@ const userModel = require("../../model/user/user.model");
 const { v4: uuid } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwtToken = require("../../helper/auth.helper");
+const cloudinary = require("../../helper/cloudinary")
 
 const userController = {
   register: (req, res) => {
@@ -97,39 +98,77 @@ const userController = {
       });
   },
 
-  updateUser: (req, res) => {
+  updateUser: async (req, res) => {
     const id = req.params.id;
     const date = new Date();
     let avatar;
 
     if (req.file) {
-      avatar = `http://${req.get("host")}/ava/${req.file.filename}`;
+      avatar = await cloudinary.uploader.upload(req.file.path);
     }
 
-    const data = {
-      id,
-      date,
-      username: req.body.username,
-      email: req.body.email,
-      phone: req.body.phone,
-      city: req.body.city,
-      address: req.body.address,
-      postcode: req.body.postcode,
-    };
     userModel
-      .updateUser(data, avatar)
-      .then(async () => {
-        const result = await userModel.getUserDetail(id);
-        success(res, result.rows[0], "success", "data has been update");
-      })
-      .catch((err) => {
-        failed(res, err.message, "failed", "internal server error");
-      });
+    .getUserDetail(id)
+    .then(async (results) => {
+      const datas = await results.rows[0]
+      console.log("datas",datas)
+      // console.log(datas)
+      if(avatar !== undefined) {
+        console.log('1')
+        const public_id = datas.ava_pub_id;
+        console.log(public_id)
+        if(public_id !== null || public_id !== undefined) {
+          await cloudinary.uploader.destroy(public_id);
+        }
+      }
+      console.log('2')
+      let ava_pub_id, ava_url, ava_secure_url;
+        if(avatar === undefined) {
+          ava_pub_id = datas.ava_pub_id
+          ava_url = datas.ava_url
+          ava_secure_url = datas.ava_secure_url
+        } else {
+          ava_pub_id = avatar.public_id
+          ava_url = avatar.url
+          ava_secure_url = avatar.secure_url
+        }
+        const data = {
+          id,
+          date,
+          username: req.body.username,
+          email: req.body.email,
+          phone: req.body.phone,
+          city: req.body.city,
+          address: req.body.address,
+          postcode: req.body.postcode,
+          avatar,
+          ava_pub_id,
+          ava_url,
+          ava_secure_url,
+        };
+        console.log(data)
+        userModel
+          .updateUser(data)
+          .then(async () => {
+            const result = await userModel.getUserDetail(id);
+            success(res, result.rows[0], "success", "data has been update");
+          })
+          .catch((err) => {
+            failed(res, err.message, "failed", "internal server error");
+          });
+    })
+
+    
   },
 
   deleteUser: async (req, res) => {
     const id = req.params.id;
     const data = await userModel.getUserDetail(id);
+    const public_id = data.rows[0].ava_pub_id;
+    console.log(public_id) 
+    if(public_id !== null) {
+      await cloudinary.uploader.destroy(public_id);
+    }
     userModel
       .deleteUser(id)
       .then(() => {
@@ -138,6 +177,19 @@ const userController = {
       .catch((err) => {
         failed(res, err.message, "failed", "internal server error");
       });
+  },
+  getAllUsers: async (req, res) => {
+    try {
+      userModel.getAllUsers()
+        .then((results) => {
+          success(res, results, "success", "get all users");
+        })
+        .catch((results) => {
+          failed(res, results, "failed", "fail get all users");
+        });
+    } catch (err) {
+      failed(res, err.message, "failed", "internal server error");
+    }
   },
 };
 

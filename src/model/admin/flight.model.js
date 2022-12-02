@@ -1,3 +1,4 @@
+const { response } = require("express");
 const pool = require("../../config/db");
 
 const flightModel = {
@@ -5,7 +6,7 @@ const flightModel = {
     return new Promise((resolve, reject) => {
       let query = {
         text: `
-        SELECT flights.*, airlines.logo AS logo, airlines.name AS airline 
+        SELECT flights.*, airlines.logo AS logo, airlines.name AS airline, airlines.logo_url as icon_airlines 
         FROM flights JOIN airlines USING (airline_id) 
         WHERE flights.departure_country ILIKE '%${data.dept_country}%'
         AND flights.departure_city ILIKE '%${data.dept_city}%'
@@ -43,12 +44,12 @@ const flightModel = {
       });
     });
   },
-  
+
   getFlightDetail: (id) => {
     return new Promise((resolve, reject) => {
       const query = {
         text: `
-        SELECT flights.*, airlines.* FROM flights JOIN airlines USING (airline_id) WHERE flight_id = '${id}'
+        SELECT flights.*, airlines.logo_url as icon_airlines, airlines.name FROM flights JOIN airlines USING (airline_id) WHERE flight_id = '${id}'
         `,
       };
       pool.query(query, (err, res) => {
@@ -60,20 +61,53 @@ const flightModel = {
     });
   },
 
+  getFlightFilter: (data) => {
+    return new Promise((resolve, reject) => {
+      console.log("model", data)
+      const query = {
+        text: `
+        SELECT flights.*, airlines.logo_url, airlines.name as maskapai
+        FROM flights JOIN airlines USING (airline_id)
+        WHERE arrival_city ILIKE '%${data.arrival_city}%'
+        AND departure_city ILIKE '%${data.departure_city}%'
+        AND transit = ${data.transit}
+        AND facilities = ${data.facilities}
+        AND departure_time = ${data.departure_time}
+        AND arrival_time = ${data.arrival_time}
+        ORDER BY airlines.name ${data.sortby}
+        `
+      }
+      pool.query(query, (err, res) => {
+        if(err) {
+          reject(err);
+        } else {
+          resolve(res)
+        }
+      })
+    })
+  },
+
   insertFlight: (data) => {
     return new Promise((resolve, reject) => {
       const query = {
         text: `INSERT INTO flights
                         (   
-                            flight_id,
-                            arrival_country, arrival_city, 
-                            departure_country, departure_city,
-                            arrival_time, departure_time, price, 
-                            terminal, gate, transit, wifi, luggage, lunch,
-                            airline_id
+                          flight_id,
+                          arrival_country, 
+                          arrival_city, 
+                          departure_country, 
+                          departure_city,
+                          arrival_time, 
+                          departure_time, 
+                          price,
+                          airline_id, 
+                          terminal, 
+                          gate, 
+                          transit, 
+                          facilities
                         )
                         VALUES (
-                            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
+                            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
                         )`,
         values: [
           data.id,
@@ -84,13 +118,11 @@ const flightModel = {
           data.arrival_time,
           data.departure_time,
           data.price,
+          data.airline_id,
           data.terminal,
           data.gate,
           data.transit,
-          data.wifi,
-          data.luggage,
-          data.lunch,
-          data.airline_id
+          data.facilities,
         ],
       };
       pool.query(query, (err, res) => {
@@ -116,12 +148,10 @@ const flightModel = {
                     terminal = COALESCE($8, terminal),
                     gate = COALESCE($9, gate),
                     transit = COALESCE($10, transit),
-                    wifi = COALESCE($11, wifi),
-                    luggage = COALESCE($12, luggage),
-                    lunch = COALESCE($13, lunch),
-                    airline_id = COALESCE($14, airline_id),
-                    updated_at = $15
-                    WHERE flight_id = $16`,
+                    facilities = COALESCE($11, facilities),
+                    airline_id = COALESCE($12, airline_id),
+                    updated_at = $13
+                    WHERE flight_id = $14`,
         values: [
           data.arrival_country,
           data.arrival_city,
@@ -133,9 +163,7 @@ const flightModel = {
           data.terminal,
           data.gate,
           data.transit,
-          data.wifi,
-          data.luggage,
-          data.lunch,
+          data.facilities,
           data.airline_id,
           data.date,
           data.id,
@@ -163,7 +191,7 @@ const flightModel = {
         resolve(res);
       });
     });
-  },  
+  },
 };
 
 module.exports = flightModel;

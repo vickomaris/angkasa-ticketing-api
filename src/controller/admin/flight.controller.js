@@ -67,11 +67,49 @@ const flightController = {
     flightModel
       .getFlightDetail(id)
       .then((results) => {
+        console.log(results)
         success(res, results.rows[0], "success", "success get data");
       })
       .catch((err) => {
         failed(res, err.message, "failed", "internal server error");
       });
+  },
+  getFlightFilter: (req, res) => {
+    const {
+      arrival_city, 
+      departure_city, 
+      transit,
+      facilities,
+      departure_time,
+      arrival_time,
+      sortby
+    } = req.query;
+
+    const data = {
+      arrival_city: arrival_city || 'Jakarta',
+      departure_city: departure_city || 'Surabaya',
+      transit: transit || 0,
+      facilities: facilities || 0,
+      departure_time: departure_time || 1,
+      arrival_time: arrival_time || 1,
+      sortby: sortby || 'asc',
+    }
+    console.log(data)
+    flightModel
+    .getFlightFilter(data)
+    .then((results) => {
+      console.log(results.rows.length)
+      let status;
+      if(results.rows.length < 1) {
+        status = 'data not found';
+      } else {
+        status = 'success get data';
+      }
+      success(res, results.rows, "success", `${status}`);
+    })
+    .catch((err) => {
+      failed(res, err.message, "failed", "internal server error");
+    })
   },
 
   insertFlight: (req, res) => {
@@ -86,19 +124,17 @@ const flightController = {
       arrival_time: req.body.arrival_time,
       departure_time: req.body.departure_time,
       price: req.body.price,
+      airline_id: req.body.airline_id,
       terminal: req.body.terminal,
       gate: req.body.gate,
       transit: req.body.transit,
-      wifi: req.body.wifi,
-      luggage: req.body.luggage,
-      lunch: req.body.lunch,
-      airline_id : req.body.airline_id
+      facilities: req.body.facilities,
     };
 
     flightModel
       .insertFlight(data)
-      .then(() => {
-        success(res, data, "flight data has been entered");
+      .then((results) => {
+        success(res, results, "flight data has been entered");
       })
       .catch((err) => {
         failed(res, err.message, "failed", "internal server error");
@@ -119,20 +155,18 @@ const flightController = {
       arrival_time: req.body.arrival_time,
       departure_time: req.body.departure_time,
       price: req.body.price,
+      airline_id: req.body.airline_id,
       terminal: req.body.terminal,
       gate: req.body.gate,
       transit: req.body.transit,
-      wifi: req.body.wifi,
-      luggage: req.body.luggage,
-      lunch: req.body.lunch,
-      airline_id: req.body.airline_id
+      facilities: req.body.facilities,
     };
 
     flightModel
       .updateFlight(data)
       .then(async () => {
         const result = await flightModel.getFlightDetail(id);
-        success(res, result.rows[0], "success", "data has been update");
+        success(res, result, "success", "data has been update");
       })
       .catch((err) => {
         failed(res, err.message, "failed", "internal server error");

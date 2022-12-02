@@ -1,6 +1,6 @@
 const createError = require("http-errors");
 const { v4: uuid } = require("uuid");
-const { success } = require("../../helper/response.helper");
+const { success, failed } = require("../../helper/response.helper");
 
 const bookingModel = require("../../model/user/booking.model");
 
@@ -13,18 +13,25 @@ const bookingController = {
         booking_id: id,
         user_id: req.body.user_id,
         flight_id: req.body.flight_id,
+        airline_id: req.body.airline_id,
         psg_title: req.body.psg_title,
         psg_name: req.body.psg_name,
         psg_nationality: req.body.psg_nationality,
-        travel_insurance: req.body.travel_insurance,
+        travel_insurance: req.body.travel_insurance || true,
+        payment_status: req.body.payment_status || false,
         total: req.body.total,
       };
 
       console.log(bookingData);
 
-      await bookingModel.createBooking(bookingData);
+      bookingModel.createBooking(bookingData)
+      .then((results) => {
+        success(res, results, "success", "booking success");
+      }).catch((err) => {
+        failed(res, err.message, "failed", "fail booking ticket");
+      })
 
-      success(res, bookingData, "success", "booking success");
+      
     } catch (error) {
       console.log(error);
       next(new createError.InternalServerError());

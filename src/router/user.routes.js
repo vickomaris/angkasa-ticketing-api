@@ -6,6 +6,7 @@ const {
   getUserDetail,
   updateUser,
   deleteUser,
+  getAllUsers
 } = require("../controller/user/user.controller");
 const upload = require("../middleware/upload.user");
 // const remove = require("../middleware/delete.user");
@@ -16,6 +17,7 @@ router
   .post("/register", register)
   .post("/login", login)
   .get("/:id", getUserDetail)
-  .put("/:id", upload, updateUser)
-  .delete("/:id", deleteUser);
+  .get("/users/list", getAllUsers)
+  .put("/update/:id", upload, updateUser)
+  .delete("/delete/:id", deleteUser);
 module.exports = router;

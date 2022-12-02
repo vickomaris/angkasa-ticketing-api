@@ -52,7 +52,7 @@ const userModel = {
     });
   },
 
-  updateUser: (data, avatar) => {
+  updateUser: (data) => {
     return new Promise((resolve, reject) => {
       pool.query(
         `
@@ -64,17 +64,23 @@ const userModel = {
         city = COALESCE ($5, city),
         address = COALESCE ($6, address),
         postcode = COALESCE ($7, postcode),
-        updated_at = $8
-        WHERE user_id = $9
+        ava_pub_id = COALESCE ($8, ava_pub_id),
+        ava_url = COALESCE ($9, ava_url),
+        ava_secure_url = COALESCE ($10, ava_secure_url),
+        updated_at = $11
+        WHERE user_id = $12
         `,
         [
           data.username,
           data.email,
           data.phone,
-          avatar,
+          data.avatar,
           data.city,
           data.address,
           data.postcode,
+          data.ava_pub_id,
+          data.ava_url,
+          data.ava_secure_url,
           data.date,
           data.id,
         ],
@@ -102,5 +108,16 @@ const userModel = {
       });
     });
   },
+  getAllUsers: () => {
+    return new Promise((resolve, reject) => {
+      pool.query("select * from users order by username asc", (err, res) => {
+        if(err) {
+          reject(err)
+        } else {
+          resolve(res)
+        }
+      })
+    })
+  }
 };
 module.exports = userModel;
