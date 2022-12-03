@@ -62,6 +62,7 @@ const userController = {
                 });
 
                 delete user.password;
+                delete user.avatar;
 
                 succesWithToken(
                   res,
