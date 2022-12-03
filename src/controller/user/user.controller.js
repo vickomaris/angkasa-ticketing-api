@@ -117,7 +117,9 @@ const userController = {
         console.log('1')
         const public_id = datas.ava_pub_id;
         console.log(public_id)
-        if(public_id !== null || public_id !== undefined) {
+        console.log(public_id)
+        if(public_id !== null) {
+          console.log('test')
           await cloudinary.uploader.destroy(public_id);
         }
       }
