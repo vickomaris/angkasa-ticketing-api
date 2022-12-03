@@ -1,5 +1,5 @@
 const createError = require("http-errors");
-const { success } = require("../../helper/response.helper");
+const { success, failed } = require("../../helper/response.helper");
 
 const bookingModel = require("../../model/admin/booking.model");
 
@@ -13,6 +13,24 @@ const bookingController = {
     } catch (error) {
       console.log(error);
       next(new createError.InternalServerError());
+    }
+  },
+  getBookingDetailByUserId: async (req, res) => {
+    try {
+      const user_id = req.params.user_id;
+      bookingModel.getBookingDetailByUserId(user_id)
+      .then((result) => {
+        console.log(result.rows[0])
+        delete result.rows[0].logo;
+        delete result.rows[0].avatar;
+        success(res, result.rows, "success", `get booking by id: ${user_id} success`);
+      })
+      .catch((err) => {
+        failed(res, err, "failed", `get booking by id: ${user_id} failed`);
+      })
+    } 
+    catch (err) {
+      failed(res,err.message, "failed", "internal server error");
     }
   },
 

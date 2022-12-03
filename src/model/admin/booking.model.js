@@ -13,6 +13,13 @@ const bookingModel = {
     JOIN users using (user_id) WHERE booking_id = '${id}'
     `);
   },
+  getBookingDetailByUserId: (user_id) => {
+    return pool.query(`
+    SELECT bookings.*, flights.*, airlines.*, users.* FROM bookings 
+    JOIN (flights join airlines using (airline_id)) using (flight_id)
+    JOIN users using (user_id) WHERE user_id = '${user_id}'
+    `);
+  },
 
   updateBooking: (id, date) => {
     return pool.query(
