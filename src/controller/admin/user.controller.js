@@ -1,5 +1,5 @@
 const { failed, success } = require("../../helper/response.helper");
-const userModel = require("../../model/user/user.model");
+const userModel = require("../../model/admin/user.model");
 
 const userController = {
   getUser: (req, res) => {
