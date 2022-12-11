@@ -213,6 +213,17 @@ API_SECRET= your cloudinaryi API secret
 <a href='#table-of-contents'>Back to top</a>
 <hr />
 
+### Contributor
+<ul>
+  <li><a href='https://github.com/ainurcoding'>Ainur Ridwan as a Fullstack Developer</a></li>
+  <li><a href='https://github.com/brndnwjy'>Brandon Wijaya as a Fullstack Developer</a></li>
+  <li><a href='https://github.com/sukron21'>Rahmat Furqon as a Frontend Developer</a></li>
+  <li><a href='https://github.com/Iqbalapredo'>Muhammad Iqbal Aprido as a Frontend Developer</a></li>
+  <li><a href='https://github.com/vickomaris'>Vicko Maris Septiadi as a Frontend Developer</a></li>
+</ul>
+<a href='#table-of-content'>Back to top</a>
+<hr />
+
 ### Packages Included
 
 <ul id='packages-included'>
