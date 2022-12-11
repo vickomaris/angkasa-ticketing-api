@@ -244,8 +244,8 @@ API_SECRET= your cloudinaryi API secret
 <hr />
 
 ### Demo Application
-<p id='demo-application'><a href='https://github.com/ainurcoding/mama_recipe_app/tree/master/frontend'>Visit frontend repository</a></p>
-<p>Visit this link for app demo <a href='https://mama-recipe-kappa.vercel.app/'>mama recipe</a></p>
+<p id='demo-application'><a href='https://github.com/ainurcoding/angkasa-ticketing-app'>Visit frontend repository</a></p>
+<p>Visit this link for app demo <a href='https://angkasa-ticketing.vercel.app/'>Ankasa Ticketing</a></p>
 
 <a href='#table-of-contents'>Back to top</a>
 <hr />
