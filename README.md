@@ -1,7 +1,7 @@
 
 # mama_recipe_app
 <div align="center"><img src="https://github.com/ainurcoding/angkasa-ticketing-app/blob/master/src/assets/logo.svg" height="50" width="50"/></div>
-<div align='center'><a href='https://github.com/ainurcoding/angkasa-ticketing-app'> >> Visit Frontend Repository << </a></div>
+<div align='center'><a href='https://github.com/vickomaris/angkasa-ticketing-app-1'> >> Visit Frontend Repository << </a></div>
 
 <hr />
 
@@ -255,26 +255,11 @@ API_SECRET= your cloudinaryi API secret
 <hr />
 
 ### Demo Application
-<p id='demo-application'><a href='https://github.com/ainurcoding/angkasa-ticketing-app'>Visit frontend repository</a></p>
+<p id='demo-application'><a href=https://github.com/vickomaris/angkasa-ticketing-app-1'>Visit frontend repository</a></p>
 <p>Visit this link for app demo <a href='https://angkasa-ticketing.vercel.app/'>Ankasa Ticketing</a></p>
 
 <a href='#table-of-contents'>Back to top</a>
 <hr />
 
-### For More Information
-<p id='for-more-information'>My Social media account:</p> <br />
-<div>
-<img height="25" width="25" src='https://camo.githubusercontent.com/c9dacf0f25a1489fdbc6c0d2b41cda58b77fa210a13a886d6f99e027adfbd358/68747470733a2f2f6564656e742e6769746875622e696f2f537570657254696e7949636f6e732f696d616765732f7376672f696e7374616772616d2e737667' alt='ig-icon'></img><span> : @ainurridwan_</span>
-</div>
-
-<div>
-<img height="25" width="25" src='https://camo.githubusercontent.com/4a3dd8d10a27c272fd04b2ce8ed1a130606f95ea6a76b5e19ce8b642faa18c27/68747470733a2f2f6564656e742e6769746875622e696f2f537570657254696e7949636f6e732f696d616765732f7376672f676d61696c2e737667' alt='gmail-icon'></img><span> : ainurridwank2@gmail.com</span>
-</div>
-
-<div align='center'>
-:copyright: Ainur Ridwan, 2022
-</div>
-
-<a href='#table-of-contents'>Back to top</a>
 
 
